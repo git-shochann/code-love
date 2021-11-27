@@ -1,13 +1,14 @@
 const puppeteer = require('puppeteer');
-const fs = require('fs');
+const fs = require('fs'); // ファイル読み込みを行う
+const axios = require('axios'); // 非同期にHTTP通信を行う
 
 const profile = JSON.parse(fs.readFileSync('puppeteer/profile.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
-// profile.billing.lastName -> "Shoko"
 
 // const proxy = JSON.parse(fs.readFileSync('proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
-// proxy.default.1 -> "52.193.255.163:3128:sho:sho"
 
-const product_url =
+const webhookUrl = fs.readFileSync('puppeteer/webhook.txt', 'utf-8'); // ファイルの読み込みを非同期的にする 文字コード指定しないと文字化けする
+
+const productUrl =
   'https://www.apple.com/jp/shop/buy-iphone/iphone-13-pro/6.1%E3%82%A4%E3%83%B3%E3%83%81%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4-256gb-%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%88';
 
 // seleniumの立ち上げ
@@ -25,7 +26,7 @@ async function givePage() {
 // 実際に商品ページに行き, カートに入れる
 async function addToCart(page) {
   console.log('adding to cart');
-  await page.goto(product_url);
+  await page.goto(productUrl);
   await page.waitForSelector('#noTradeIn');
   await page.click('#noTradeIn', (elem) => elem.click());
   await page.waitForSelector("button[name='add-to-cart']");
@@ -78,7 +79,20 @@ async function fillBiling(page) {
 }
 
 // discordにWebhookとして飛ばす
-async function sendWebhook(page) {}
+async function sendWebhook(page) {
+  const requestHeader = {
+    'Content-Type': 'application/json',
+  };
+  const requestBody = {
+    content: 'Success!',
+  };
+  try {
+    const res = await axios.post(webhookUrl, requestBody, requestHeader);
+    console.log(res.status);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function checkOut(page) {
   var page = await givePage();
@@ -86,6 +100,7 @@ async function checkOut(page) {
   await signIn(page);
   await howToRecive(page);
   await fillBiling(page);
+  await sendWebhook(page);
 }
 
 checkOut();

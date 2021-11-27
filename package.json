@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "fs": "^0.0.1-security",
     "puppeteer": "^11.0.0"
   }
