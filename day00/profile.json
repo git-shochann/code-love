@@ -1,0 +1,13 @@
+{
+  "billing": {
+    "firstName": "Takahashi",
+    "lastName": "Shoko",
+    "zipCode": "150-0043",
+    "prefecture": "東京都",
+    "city": "渋谷区",
+    "addressLine1": "道玄坂1-2-3",
+    "addressLine2": "サウナビル100F",
+    "email": "shochann1@choco.la",
+    "phoneNumber": "09012345678"
+  }
+}
