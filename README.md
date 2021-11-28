@@ -1,4 +1,4 @@
-### How to use 🤯
+### How To Use 🤯
 
 ## 000
 
