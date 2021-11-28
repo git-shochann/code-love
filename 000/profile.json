@@ -9,5 +9,10 @@
     "addressLine2": "サウナビル100F",
     "email": "shochann1@choco.la",
     "phoneNumber": "09012345678"
+  },
+  "payment": {
+    "cardNumber": "4111111111111111",
+    "expired": "12/20",
+    "cvv": "123"
   }
 }

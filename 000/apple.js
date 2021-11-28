@@ -85,44 +85,45 @@ async function howToRecive(page) {
   console.log('Submitted method to receive!');
 }
 
+//
+//  WIP
+//
+
 // 住所を入力する
 async function fillShipping(page) {
   await page.waitForTimeout(2000);
 
   // 苗字
-  await page.waitForSelector("input[data-autom='form-field-lastName]");
-  const lastNameInput = await page.$("input[data-autom='form-field-lastName]"); // そもそもここが取れてない。
-  page.waitForTimeout(1000);
-  await lastNameInput.click();
-  await page.type("input[data-autom='form-field-lastName']", profile.billing.lastName, {
-    delay: 100,
-  });
+  // await page.waitForSelector("input[data-autom='form-field-lastName]");
+  // const lastNameInput = await page.$("input[data-autom='form-field-lastName]"); // そもそもここが取れてない。-> これだと動かなかったのはなぜ？
+  // page.waitForTimeout(1000);
+  // await lastNameInput.click();
+  await page.type("input[data-autom='form-field-lastName']", profile.billing.lastName);
 
   // 名前
-  await page.waitForSelector("input[data-autom='form-field-firstName]");
-  await page.type("input[data-autom='form-field-firstName']", profile.billing.firstName);
+  await page.type("input[data-autom='form-field-firstName']", profile.billing.firstName, {
+    delay: 100,
+  });
 
   // 郵便番号
   await page.waitForSelector("input[data-autom='form-field-postalCode']");
   const postalCodeInput = await page.$("input[data-autom='form-field-postalCode']");
-  await page.waitForTimeout(1000);
   await postalCodeInput.click({ clickCount: 3 });
-  await postalCodeInput.type(profile.billing.zipCode, { delay: 100 });
+  await postalCodeInput.type(profile.billing.zipCode);
 
   // 都道府県
-  await page.waitForSelector('select[data-autom=form-field-state]');
-  await page.select('select[data-autom=form-field-state]', profile.billing.prefecture);
+  await page.select("select[data-autom='form-field-state']", profile.billing.prefecture);
+
+  // 市区町村
+  await page.type("input[data-autom='form-field-city']", profile.billing.city);
 
   // 住所1
-  await page.waitForSelector("input[data-autom='form-field-address1']");
   await page.type("input[data-autom='form-field-street']", profile.billing.addressLine1);
 
   // 住所2
-  await page.waitForSelector("input[data-autom='form-field-address2']");
   await page.type("input[data-autom='form-field-street2']", profile.billing.addressLine2);
 
   // メールアドレス
-  await page.waitForSelector("input[data-autom='form-field-emailAddress']");
   await page.type("input[data-autom='form-field-emailAddress']", profile.billing.email);
 
   // 電話番号
@@ -130,12 +131,14 @@ async function fillShipping(page) {
   await page.type("input[data-autom='form-field-mobilePhone']", profile.billing.phoneNumber);
 
   // 支払いに進むボタンを押す
-  await page.waitForSelector("button[data-autom='checkout-billing-continue-button']");
   const continuePayment = await page.$("button[data-autom='shipping-continue-button']");
   await continuePayment.click();
 
   console.log('Submitted for shipping');
 }
+
+async function submitPayment(page) {}
+l;
 
 // discordにWebhookとして飛ばす
 async function sendWebhook(page) {
@@ -159,6 +162,7 @@ async function checkOut(page) {
   await signIn(page);
   await howToRecive(page);
   await fillShipping(page);
+  await submitPayment(page);
   await sendWebhook(page);
 }
 
