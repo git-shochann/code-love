@@ -16,8 +16,14 @@ async function givePage() {
   console.log('initilizing...');
   const browser = await puppeteer.launch({
     headless: false,
+    slowMo: 50, // かなり安定した
   });
   const page = await browser.newPage();
+  // あってもなくてもいいけど、画面がしっかり見えるようにする
+  await page.setViewport({
+    width: 1200,
+    height: 800,
+  });
   return page;
 }
 
@@ -62,7 +68,6 @@ async function howToRecive(page) {
 
   await page.waitForSelector("input[data-autom='form-field-postalCode']");
   const postalCodeInput = await page.$("input[data-autom='form-field-postalCode']");
-  await page.waitForTimeout(1000); // これがないと動かなかった
 
   await postalCodeInput.click({ clickCount: 3 });
 
@@ -71,9 +76,6 @@ async function howToRecive(page) {
   await page.waitForSelector('select[data-autom=form-field-state]');
   await page.select('select[data-autom=form-field-state]', profile.billing.prefecture);
 
-  await page.waitForTimeout(2000);
-
-  page.mouse.down(); // これを追加したら動いた WHY?
   await page.waitForTimeout(2000);
 
   await page.waitForSelector("button[data-autom='fulfillment-continue-button']");
