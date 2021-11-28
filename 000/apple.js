@@ -138,7 +138,6 @@ async function fillShipping(page) {
 }
 
 async function submitPayment(page) {}
-l;
 
 // discordにWebhookとして飛ばす
 async function sendWebhook(page) {
