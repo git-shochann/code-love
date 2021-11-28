@@ -1,10 +1,10 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs'); // ファイル読み込みを行う
-const axios = require('axios'); // 非同期にHTTP通信を行う
+const axios = require('axios'); // 非同期的にHTTP通信を行う
 
 const profile = JSON.parse(fs.readFileSync('puppeteer/profile.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
-// const proxy = JSON.parse(fs.readFileSync('proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
+const proxy = JSON.parse(fs.readFileSync('puppeteer/proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
 const webhookUrl = fs.readFileSync('puppeteer/webhook.txt', 'utf-8'); // ファイルの読み込みを非同期的にする 文字コード指定しないと文字化けする
 
@@ -13,35 +13,37 @@ const productUrl =
 
 // seleniumの立ち上げ
 async function givePage() {
-  console.log('initilizing');
+  console.log('initilizing...');
   const browser = await puppeteer.launch({
     headless: false,
-    // args: ['--proxy-server=52.193.255.163:3128:sho:sho'],
-    // args: [`--proxy-server-proxy=${proxy.dafault.1}`],
   });
   const page = await browser.newPage();
   return page;
 }
 
 // 実際に商品ページに行き, カートに入れる
+
 async function addToCart(page) {
-  console.log('adding to cart');
+  console.log('adding to cart...');
   await page.goto(productUrl);
   await page.waitForSelector('#noTradeIn');
-  await page.click('#noTradeIn', (elem) => elem.click());
+  const tradeIn = await page.$('#noTradeIn'); // 要素を取得して変数に代入
+  await tradeIn.click(); // 要素をクリック
   await page.waitForSelector("button[name='add-to-cart']");
-  await page.click("button[name='add-to-cart']", (elem) => elem.click()); // この書き方は？
+  const addToCartButton = await page.$("button[name='add-to-cart']");
+  await addToCartButton.click();
   await page.waitForSelector("button[name='proceed']");
-  await page.click("button[name='proceed']", (elem) => elem.click());
-  // await page.waitForSelector('#shoppingCart.actions.checkout'); // これでは取れなかった。
-  // await page.waitForNavigation(); // 違いは？
+  const proceedButton = await page.$("button[name='proceed']");
+  await proceedButton.click();
   await page.waitForSelector("button[data-autom='checkout']");
-  await page.click("button[data-autom='checkout']", (elem) => elem.click());
+  const checkoutButton = await page.$("button[data-autom='checkout']");
+  await checkoutButton.click();
+  await page.waitForTimeout(2000); // 2秒待つ
 }
 
 //サインイン方法の選択 -> 今回はゲスト購入
 async function signIn(page) {
-  console.log('selecting sign-in method');
+  console.log('selecting sign-in method...');
   await page.waitForNavigation();
   // await page.waitForSelector("button[data-autom='guest-checkout-btn']"); waitForNavigationであればいけた。
   await page.click("button[data-autom='guest-checkout-btn']", (elem) => elem.click());
@@ -49,11 +51,11 @@ async function signIn(page) {
 
 // 受け取り方法の選択
 async function howToRecive(page) {
-  console.log('selecting method to receive');
+  console.log('selecting method to receive...');
+  // await page.waitForNavigation();
+  // await page.click("input[data-autom='fulfillment-option-HOME']", (elem) => elem.click());
   await page.waitForNavigation();
-  await page.click("input[data-autom='fulfillment-option-HOME']", (elem) => elem.click());
-  await page.waitForNavigation();
-  await page.click("button[data-autom='checkout-zipcode-edit']", (elem) => elem.click());
+  await page.click("input[data-autom='form-field-postalCode']", (elem) => elem.click());
   const input = await page.$("input[data-autom='form-field-postalCode']");
   await input.click({ clickCount: 3 });
   await input.type(profile.billing.zipCode, { delay: 300 });
@@ -65,7 +67,7 @@ async function howToRecive(page) {
 
 // 住所を入力する
 async function fillBiling(page) {
-  console.log('filling billing');
+  console.log('filling billing...');
   await page.waitForNavigation();
   await page.type("input[data-autom='form-field-lastName']", profile.billing.lastName);
   await page.type("input[data-autom='form-field-firstName']", profile.billing.firstName);
