@@ -2,11 +2,11 @@ const puppeteer = require('puppeteer');
 const fs = require('fs'); // ファイル読み込みを行う
 const axios = require('axios'); // 非同期的にHTTP通信を行う
 
-const profile = JSON.parse(fs.readFileSync('puppeteer/profile.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
+const profile = JSON.parse(fs.readFileSync('00/profile.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
-const proxy = JSON.parse(fs.readFileSync('puppeteer/proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
+const proxy = JSON.parse(fs.readFileSync('00/proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
-const webhookUrl = fs.readFileSync('puppeteer/webhook.txt', 'utf-8'); // ファイルの読み込みを非同期的にする 文字コード指定しないと文字化けする
+const webhookUrl = fs.readFileSync('00/webhook.txt', 'utf-8'); // ファイルの読み込みを非同期的にする 文字コード指定しないと文字化けする
 
 const productUrl =
   'https://www.apple.com/jp/shop/buy-iphone/iphone-13-pro/6.1%E3%82%A4%E3%83%B3%E3%83%81%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4-256gb-%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%88';
