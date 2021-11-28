@@ -85,25 +85,21 @@ async function howToRecive(page) {
   console.log('Submitted method to receive!');
 }
 
-//
-//  WIP
-//
-
 // 住所を入力する
 async function fillShipping(page) {
   await page.waitForTimeout(2000);
 
-  // 苗字
+  // 苗字 // これだとなぜ動かなかった？
   // await page.waitForSelector("input[data-autom='form-field-lastName]");
   // const lastNameInput = await page.$("input[data-autom='form-field-lastName]"); // そもそもここが取れてない。-> これだと動かなかったのはなぜ？
   // page.waitForTimeout(1000);
   // await lastNameInput.click();
+
+  // 苗字
   await page.type("input[data-autom='form-field-lastName']", profile.billing.lastName);
 
   // 名前
-  await page.type("input[data-autom='form-field-firstName']", profile.billing.firstName, {
-    delay: 100,
-  });
+  await page.type("input[data-autom='form-field-firstName']", profile.billing.firstName);
 
   // 郵便番号
   await page.waitForSelector("input[data-autom='form-field-postalCode']");
@@ -134,12 +130,56 @@ async function fillShipping(page) {
   const continuePayment = await page.$("button[data-autom='shipping-continue-button']");
   await continuePayment.click();
 
-  console.log('Submitted for shipping');
+  console.log('Submitted Shipping!');
 }
 
-async function submitPayment(page) {}
+// 支払い情報の入力
+async function submitPayment(page) {
+  await page.waitForTimeout(2000);
 
-// discordにWebhookとして飛ばす
+  // 支払い方法を選択
+  const selectCard = await page.$("input[data-autom='checkout-billingOptions-CREDIT']");
+  await selectCard.click();
+
+  await page.waitForTimeout(1000);
+
+  // クレジットカード情報を入力する
+  await page.waitForSelector("input[data-autom='card-number-input']");
+  await page.type("input[data-autom='card-number-input']", profile.payment.cardNumber);
+
+  // 有効期限
+  await page.type("input[data-autom='expiration-input']", profile.payment.expirationDate);
+
+  // CVV
+  await page.type("input[data-autom='security-code-input']", profile.payment.cvv);
+
+  // 注文の確認ボタンを押す
+  const checkOrder = await page.$("button[data-autom='continue-button-label']");
+  await checkOrder.click();
+
+  console.log('Submitted Payment!');
+}
+
+async function confirmOrder(page) {
+  await page.waitForTimeout(2000);
+
+  // 注文の確認ボタンを押す
+  const confirmOrder = await page.$("button[data-autom='continue-button-label']");
+  await confirmOrder.click();
+
+  console.log('Checking Order..');
+  console.log('Proceessing Order...');
+
+  await page.waitForTimeout(5000);
+
+  console.log('Successfully Checked Out!');
+
+  // if // 注文完了の画面が表示されたら、成功でWebhookを飛ばす
+
+  // // 注文の成功が起きなければ、3回だけリトライする
+}
+
+// discordにオーダー情報と共に, Webhookとして飛ばす
 async function sendWebhook(page) {
   const requestHeader = {
     'Content-Type': 'application/json',
@@ -149,7 +189,7 @@ async function sendWebhook(page) {
   };
   try {
     const res = await axios.post(webhookUrl, requestBody, requestHeader);
-    console.log(res.status);
+    if (res.status === 200 || res.status === 204) console.log('Posted Webhook!');
   } catch (error) {
     console.error(error);
   }
@@ -162,6 +202,7 @@ async function checkOut(page) {
   await howToRecive(page);
   await fillShipping(page);
   await submitPayment(page);
+  await confirmOrder(page);
   await sendWebhook(page);
 }
 
