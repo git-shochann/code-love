@@ -1,22 +1,56 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs'); // ファイル読み込みを行う
 const axios = require('axios'); // 非同期的にHTTP通信を行う
+const prompt = require('prompt-sync')(); // ユーザーにターミナル上で入力をしてもらう
 
 const profile = JSON.parse(fs.readFileSync('000/profile.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
-const proxy = JSON.parse(fs.readFileSync('000/proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
+// const proxy = JSON.parse(fs.readFileSync('000/proxy.json')); // ファイルの読み込みを非同期的にして、JSONでパースする
 
 const webhookUrl = fs.readFileSync('000/webhook.txt', 'utf-8'); // ファイルの読み込みを非同期的にする 文字コード指定しないと文字化けする
 
 const productUrl =
   'https://www.apple.com/jp/shop/buy-iphone/iphone-13-pro/6.1%E3%82%A4%E3%83%B3%E3%83%81%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4-256gb-%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%88';
 
+// 一番初めに呼び出される関数 // エラー発生中
+async function selectMode() {
+  const mode = prompt('Please select number, DEBUG[0] or PRODUCTION[1]: ');
+  if (mode === 0) {
+    await debug();
+  } else if (mode === 1) {
+    await checkOut();
+  } else {
+    console.log('Invalid mode!');
+  }
+}
+
+// Debug
+async function debug() {
+  console.log('Debug mode started...');
+  const page = await givePage();
+  await page.waitForTimeout(600000);
+  page.close();
+}
+
+// Production
+async function checkOut(page) {
+  var page = await givePage();
+  await addToCart(page);
+  await signIn(page);
+  await howToRecive(page);
+  await fillShipping(page);
+  await submitPayment(page);
+  await confirmOrder(page);
+  await sendWebhook(page);
+}
+
 // seleniumの立ち上げ
 async function givePage() {
-  console.log('initilizing...');
+  console.log('Initializing...');
   const browser = await puppeteer.launch({
     headless: false,
     slowMo: 50, // かなり安定した
+    args: ['--proxy-server=13.230.169.97:3128', '--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
   // あってもなくてもいいけど、画面がしっかり見えるようにする
@@ -24,6 +58,7 @@ async function givePage() {
     width: 1200,
     height: 800,
   });
+  await page.authenticate({ username: 'sho', password: 'sho' }); // 認証が必要
   return page;
 }
 
@@ -31,7 +66,6 @@ async function givePage() {
 
 async function addToCart(page) {
   await page.goto(productUrl);
-  await page.waitForTimeout(2000); // 2秒待つ
   await page.waitForSelector('#noTradeIn');
   const tradeIn = await page.$('#noTradeIn'); // 要素を取得して変数に代入
   await tradeIn.click(); // 要素をクリック
@@ -195,15 +229,4 @@ async function sendWebhook(page) {
   }
 }
 
-async function checkOut(page) {
-  var page = await givePage();
-  await addToCart(page);
-  await signIn(page);
-  await howToRecive(page);
-  await fillShipping(page);
-  await submitPayment(page);
-  await confirmOrder(page);
-  await sendWebhook(page);
-}
-
-checkOut();
+selectMode();
