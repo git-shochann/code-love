@@ -31,3 +31,4 @@
 ### MEMO
 
 - Promise
+- JS 条件分岐再度確認

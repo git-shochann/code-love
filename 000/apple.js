@@ -20,13 +20,13 @@ async function selectMode() {
   } else if (mode === 1) {
     await checkOut();
   } else {
-    console.log('Invalid mode!');
+    console.log('Invalid Mode!');
   }
 }
 
 // Debug
 async function debug() {
-  console.log('Debug mode started...');
+  console.log('Debug Mode Started...');
   const page = await givePage();
   await page.waitForTimeout(600000);
   page.close();
