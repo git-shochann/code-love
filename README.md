@@ -4,7 +4,7 @@
 
 ![UltraInstinctGoku👋](https://steamuserimages-a.akamaihd.net/ugc/933813375174275464/A547CA1C4D425339D0D2043E6527DC24F8BF08CD/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false)
 
-## 000 - AppleStore Auto CheckOut
+## 000 - AppleStore Auto Checkout
 
 ### 準備するもの
 
@@ -31,7 +31,7 @@
 
 12/1 - 関数は全てアロー関数で書いてみる, その他触ったことのない Syntax で書く, ディズニーのサイト永
 遠にリクエスト送ってもずっとエラーページ。全く他のページでもとりあえず情報が載っているのでそこをスク
-レイピングし、通知させる。通知は SMS, LINE どちらかにする
+レイピングし、通知させる。通知は LINE, Discord?
 
 - JavaScript でレンダリングするページについて、スクレイピングを行う
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 003 - Attach Private IP to Server Using NHN Toast API
+## 002 - Attach Private IP to Server Using NHN Toast API
 
 ---
 
@@ -57,5 +57,3 @@
 
 - Promise
 - ~~JS 条件分岐再度確認~~
-</div>
-</details>
