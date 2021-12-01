@@ -1,9 +1,12 @@
-### How To Use & Memo 🤯
+### How To Use 🤯
 
-Markdown:
-![MigatteGoku]("https://steamcommunity.com/sharedfiles/filedetails/?l=japanese&id=1387749090")
+<br>
 
-## 000 - Apple Store Auto Check Out
+![MigatteGoku👋](https://steamuserimages-a.akamaihd.net/ugc/933813375174275464/A547CA1C4D425339D0D2043E6527DC24F8BF08CD/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false)
+
+<br>
+
+## 000 - AppleStore Auto CheckOut
 
 ### 準備するもの
 
@@ -22,7 +25,7 @@ Markdown:
 
 ---
 
-## 001 - Disney Stock Monitor Notification
+## 001 - Restock Notification of Disney Ticket
 
 ### 準備するもの
 
@@ -30,7 +33,7 @@ Markdown:
 
 ---
 
-<details> <summary> 今後の予定等 </summary>
+<details> <summary> ### 今後の予定等 </summary>
 <div>
 
 - CI/CD を Github Actions にて実装
