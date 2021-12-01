@@ -1,4 +1,7 @@
-### How To Use & Memos 🤯
+### How To Use & Memo 🤯
+
+Markdown:
+![MigatteGoku]("https://steamcommunity.com/sharedfiles/filedetails/?l=japanese&id=1387749090")
 
 ## 000 - Apple Store Auto Check Out
 
@@ -27,12 +30,15 @@
 
 ---
 
-### 今後の予定
+<details> <summary> 今後の予定等 </summary>
+<div>
 
 - CI/CD を Github Actions にて実装
 - サーバーレスでの実装
 
-### MEMO
+### メモ
 
 - Promise
 - ~~JS 条件分岐再度確認~~
+</div>
+</details>
