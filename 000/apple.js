@@ -201,7 +201,7 @@ async function confirmOrder(page) {
   const confirmOrder = await page.$("button[data-autom='continue-button-label']");
   await confirmOrder.click();
 
-  console.log('Checking Order..');
+  console.log('Checking Order...');
   console.log('Proceessing Order...');
 
   await page.waitForTimeout(5000);

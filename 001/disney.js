@@ -10,7 +10,7 @@ const Monitor = async () => {
   // 戻り値はHTMLなので、使用するBodyのみJSで使えるようにパースする
   const $ = cheerio.load(htmlResponse.data);
   //   console.log($('.textalign').eq(0).text());
-  console.log($.html());
+  console.log($('.tab2-tds').text());
 };
 
 Monitor();
