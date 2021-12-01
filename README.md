@@ -1,4 +1,6 @@
-### How To Use 🤯
+# How To Use 🤯
+
+**including development notes**
 
 ![MigatteGoku👋](https://steamuserimages-a.akamaihd.net/ugc/933813375174275464/A547CA1C4D425339D0D2043E6527DC24F8BF08CD/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false)
 
@@ -27,7 +29,18 @@
 
 ### 準備するもの
 
-12/1 - 関数は全てアロー関数で書いてみる, その他触ったことのない Syntax で書く
+12/1 - 関数は全てアロー関数で書いてみる, その他触ったことのない Syntax で書く, ディズニーのサイト永
+遠にリクエスト送ってもずっとエラーページ。
+
+- JavaScript でレンダリングするページについて、スクレイピングを行う
+
+---
+
+<br>
+
+---
+
+## 003 - Attach Private IP to Server Using NHN Toast API
 
 ---
 
@@ -37,6 +50,7 @@
 
 - CI/CD を Github Actions にて実装
 - サーバーレスでの実装
+- Electron 化
 
 ### メモ
 
