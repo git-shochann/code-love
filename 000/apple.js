@@ -12,12 +12,12 @@ const webhookUrl = fs.readFileSync('000/webhook.txt', 'utf-8'); // ファイル�
 const productUrl =
   'https://www.apple.com/jp/shop/buy-iphone/iphone-13-pro/6.1%E3%82%A4%E3%83%B3%E3%83%81%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4-256gb-%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%88';
 
-// 一番初めに呼び出される関数 // エラー発生中
+// 一番初めに呼び出される関数
 async function selectMode() {
-  const mode = prompt('Please select number, DEBUG[0] or PRODUCTION[1]: ');
-  if (mode === 0) {
+  const mode = prompt('Please select number, DEBUG[0] or PRODUCTION[1]: '); // ここでの戻り値はString型
+  if (mode == '0') {
     await debug();
-  } else if (mode === 1) {
+  } else if (mode == '1') {
     await checkOut();
   } else {
     console.log('Invalid Mode!');
@@ -50,7 +50,7 @@ async function givePage() {
   const browser = await puppeteer.launch({
     headless: false,
     slowMo: 50, // かなり安定した
-    args: ['--proxy-server=13.230.169.97:3128', '--no-sandbox', '--disable-setuid-sandbox'],
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
   // あってもなくてもいいけど、画面がしっかり見えるようにする
@@ -58,7 +58,7 @@ async function givePage() {
     width: 1200,
     height: 800,
   });
-  await page.authenticate({ username: 'sho', password: 'sho' }); // 認証が必要
+  // await page.authenticate({ username: 'sho', password: 'sho' }); // 認証が必要
   return page;
 }
 
