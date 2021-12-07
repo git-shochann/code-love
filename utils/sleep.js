@@ -6,5 +6,7 @@ const sleep = (time) => {
   });
 };
 
+// promise, async, await弱い
+
 // この関数をエキスポートする
-export default sleep;
+module.exports = sleep;

@@ -39,8 +39,9 @@ const main = async () => {
     if (maintenanceMessage) {
       console.log('メンテナンス中...');
       await page.close();
-      await sleep(3000); // 3秒待つ
-      main();
+      console.log('10秒後リスタートします。');
+      await sleep(10000); // 10秒待つ
+      await main();
     }
 
     // ディズニーシーを選択する
