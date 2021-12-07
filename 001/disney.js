@@ -39,7 +39,7 @@ const main = async () => {
       console.log('メンテナンス中');
       await page.close();
       console.log('5秒後リスタートします');
-      await sleep(5000); // 10秒待つ
+      await sleep(5000); // 5秒待つ
       await main();
     }
 
@@ -60,10 +60,11 @@ const main = async () => {
     if (textMessage == '現在、販売していません') {
       console.log('現在、販売していません...');
       await page.close();
-      await page.waitForTimeout(2000);
+      await sleep(5000); // 5秒待つ
       main();
     } else {
       console.log('在庫復活!!!');
+      // 在庫復活したので、URLと共にLINEに送る
     }
   } catch (error) {
     console.log(error);
