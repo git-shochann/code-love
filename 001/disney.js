@@ -16,8 +16,7 @@ const productUrl =
 // pageの設定
 const Page = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
-    devtools: true,
+    headless: false, // headless true出来ない?
     language: 'ja',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
@@ -29,7 +28,7 @@ const main = async () => {
   try {
     const page = await Page();
     await page.goto(productUrl);
-    console.log('page loaded');
+    console.log('Page loaded');
 
     // メンテナンスページを取得する
     const maintenanceMessage = await page.evaluate(
@@ -37,16 +36,16 @@ const main = async () => {
     );
 
     if (maintenanceMessage) {
-      console.log('メンテナンス中...');
+      console.log('メンテナンス中');
       await page.close();
-      console.log('10秒後リスタートします。');
-      await sleep(10000); // 10秒待つ
+      console.log('5秒後リスタートします');
+      await sleep(5000); // 10秒待つ
       await main();
     }
 
     // ディズニーシーを選択する
     await page.waitForTimeout(3000);
-    await page.waitForSelector('.list-1day-02');
+    await page.waitForSelector('.list-1day-02'); // これ機能してる？
     const disneySea = await page.$('.list-1day-02');
     await disneySea.click();
     console.log('disneySea clicked');
@@ -63,15 +62,13 @@ const main = async () => {
       await page.close();
       await page.waitForTimeout(2000);
       main();
-    } else if (maintenanceMessage.indexOf('メンテナンス') != -1) {
-      console.log('メンテナンス中...');
     } else {
       console.log('在庫復活!!!');
     }
   } catch (error) {
     console.log(error);
-    console.log('エラーが発生しました。');
-    main();
+    console.log('Something went wrong...');
+    // エラー通知をLINEに送る
   }
 };
 
