@@ -2,13 +2,12 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const sleep = require('../utils/sleep');
+const line = require('line-bot-sdk');
 
-// const productUrl = 'https://www.tokyodisneyresort.jp/ticket/index/202201#ticket'; クエリ文字列のを見つけてしまった
-// const productUrl = 'https://www.tokyodisneyresort.jp/ticket/index/202201?park=tds#ticket'; クエリ文字列でも結局は表示させただけでスクレイピングすると、ディズニーランドのほうになってしまう(日付は別となってる)
-
-// 1/1のディズニーランド 復活を確認
-// 発売予定になると値段が表示される仕様なので誤作動注意
-// const productUrl = 'https://www.tokyodisneyresort.jp/ticket/index/202201#ticket';
+//LINEメッセージ配信用の設定
+const config = {
+  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+};
 
 const productUrl =
   'https://reserve.tokyodisneyresort.jp/ticket/search/?outside=1&route=2&parkTicketGroupCd=020&useDateFrom=20211219';
@@ -69,7 +68,7 @@ const main = async () => {
   } catch (error) {
     console.log(error);
     console.log('Something went wrong...');
-    // エラー通知をLINEに送る
+    // エラー通知をデバッグとして自分のLINE Notifyに送る
   }
 };
 
