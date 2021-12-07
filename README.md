@@ -33,9 +33,13 @@
 遠にリクエスト送ってもずっとエラーページ。全く他のページでもとりあえず情報が載っているのでそこをスク
 レイピングし、通知させる。通知は LINE, SMS, Discord
 
+12/8 更新ほぼ一旦動くまでは出来た。ただ待つ時間を設定しないとエラーになる。リトライ追加
+
 - JavaScript でレンダリングするページについて、スクレイピングを行う
 - 一旦 1.0.0 では通知のみで開発
 - 次のアップデートで全自動購入まで仕上げる
+
+12 月は毎日インプットしてコードを書く！
 
 ---
 
@@ -43,7 +47,15 @@
 
 ---
 
-## 002 - Attach Private IP to Server Using NHN Toast API
+## 003 - Restock Monitor for Amazon
+
+---
+
+<br>
+
+---
+
+## 004 - Attach Private IP to Server Using NHN Toast API
 
 ---
 
