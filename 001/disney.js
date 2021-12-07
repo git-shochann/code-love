@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const sleep = require('../utils/sleep');
 
 // const productUrl = 'https://www.tokyodisneyresort.jp/ticket/index/202201#ticket'; クエリ文字列のを見つけてしまった
 // const productUrl = 'https://www.tokyodisneyresort.jp/ticket/index/202201?park=tds#ticket'; クエリ文字列でも結局は表示させただけでスクレイピングすると、ディズニーランドのほうになってしまう(日付は別となってる)
@@ -30,6 +31,18 @@ const main = async () => {
     await page.goto(productUrl);
     console.log('page loaded');
 
+    // メンテナンスページを取得する
+    const maintenanceMessage = await page.evaluate(
+      () => document.getElementsByClassName('pghError01')[0].innerText,
+    );
+
+    if (maintenanceMessage) {
+      console.log('メンテナンス中...');
+      await page.close();
+      await sleep(3000); // 3秒待つ
+      main();
+    }
+
     // ディズニーシーを選択する
     await page.waitForTimeout(3000);
     await page.waitForSelector('.list-1day-02');
@@ -40,26 +53,25 @@ const main = async () => {
     await page.waitForTimeout(3000);
 
     // テキストを取得する
-    const text = await page.evaluate(
+    const textMessage = await page.evaluate(
       () => document.getElementsByClassName('list-salesform-eticket-message')[0].innerText,
     );
 
-    if (text == '現在、販売していません') {
-      console.log('現在、販売していません');
-      page.close();
+    if (textMessage == '現在、販売していません') {
+      console.log('現在、販売していません...');
+      await page.close();
       await page.waitForTimeout(2000);
       main();
+    } else if (maintenanceMessage.indexOf('メンテナンス') != -1) {
+      console.log('メンテナンス中...');
     } else {
-      console.log('Restock!');
+      console.log('在庫復活!!!');
     }
   } catch (error) {
     console.log(error);
-    page.close();
-    await page.waitForTimeout(2000);
+    console.log('エラーが発生しました。');
     main();
   }
 };
-
-// Tips : リクエストヘッダーをブラウザと一緒にすることで、Program判定を受けない
 
 main();
