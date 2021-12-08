@@ -15,7 +15,7 @@ const productUrl =
 // pageの設定
 const Page = async () => {
   const browser = await puppeteer.launch({
-    headless: false, // headless true出来ない?
+    headless: false,
     language: 'ja',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
@@ -25,44 +25,66 @@ const Page = async () => {
 
 const main = async () => {
   try {
-    const page = await Page();
-    await page.goto(productUrl);
-    console.log('Page loaded');
+    const browser = await puppeteer.launch({
+      headless: false,
+      language: 'ja',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
 
-    // メンテナンスページを取得する
-    const maintenanceMessage = await page.evaluate(
-      () => document.getElementsByClassName('pghError01')[0].innerText,
-    );
+    await page.goto(productUrl, { waitUntil: 'networkidle0' });
+    console.log('Page loaded...');
 
-    if (maintenanceMessage) {
-      console.log('メンテナンス中');
-      await page.close();
-      console.log('5秒後リスタートします');
-      await sleep(5000); // 5秒待つ
+    // 混雑ページを取得
+    if (
+      await page.evaluate(
+        () =>
+          document.getElementsByClassName('textalign')[0]?.innerText.indexOf('アクセスが集中') > -1,
+      )
+    ) {
+      console.log('Site is busy...');
+      await browser.close();
+      console.log('Restart in 5sec...');
+      await sleep(5000);
       await main();
     }
 
-    // ディズニーシーを選択する
-    await page.waitForTimeout(3000);
+    console.log('Crowded page passed...');
+
+    // メンテナンスページを取得
+    if (
+      await page.evaluate(
+        () =>
+          document.getElementsByClassName('pghError01')[0]?.innerText.indexOf('メンテナンス中') >
+          -1,
+      )
+    ) {
+      console.log('Under maintenance...');
+      await browser.close();
+      console.log('Restart in 5sec...');
+      await sleep(5000);
+      await main();
+    }
+
+    console.log('Maintenance page passed...');
+
+    // ディズニーシーを選択
     await page.waitForSelector('.list-1day-02'); // これ機能してる？
     const disneySea = await page.$('.list-1day-02');
     await disneySea.click();
-    console.log('disneySea clicked');
-
-    await page.waitForTimeout(3000);
-
-    // テキストを取得する
+    console.log('DisneySea clicked...');
+    await sleep(5000); // ここがsleepのみでいいのか問題 -> 混雑時終わる気がする
+    // テキストを取得
     const textMessage = await page.evaluate(
       () => document.getElementsByClassName('list-salesform-eticket-message')[0].innerText,
     );
 
     if (textMessage == '現在、販売していません') {
-      console.log('現在、販売していません...');
-      await page.close();
-      await sleep(5000); // 5秒待つ
-      main();
+      console.log('Waiting for restock...');
+      await browser.close();
+      await main();
     } else {
-      console.log('在庫復活!!!');
+      console.log('Restock!');
       // 在庫復活したので、URLと共にLINEに送る
     }
   } catch (error) {
