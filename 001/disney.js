@@ -12,26 +12,17 @@ const config = {
 const productUrl =
   'https://reserve.tokyodisneyresort.jp/ticket/search/?outside=1&route=2&parkTicketGroupCd=020&useDateFrom=20211219';
 
-// pageの設定
-const Page = async () => {
-  const browser = await puppeteer.launch({
-    headless: false,
-    language: 'ja',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
-  const page = await browser.newPage();
-  return page;
-};
-
 const main = async () => {
   try {
     const browser = await puppeteer.launch({
       headless: false,
       language: 'ja',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
     });
     const page = await browser.newPage();
-
+    await page.setUserAgent(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+    );
     await page.goto(productUrl, { waitUntil: 'networkidle0' });
     console.log('Page loaded...');
 

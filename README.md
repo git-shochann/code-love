@@ -25,7 +25,7 @@
 
 ---
 
-## 001 - Restock Notification 1.0.0 for Disney Ticket
+## 001 - Restock Notification for Disney Ticket
 
 ### 準備するもの
 
@@ -48,29 +48,10 @@
 
 <br>
 
----
-
-## 003 - Restock Monitor for Amazon
-
----
-
-<br>
-
----
-
-## 004 - Attach Private IP to Server Using NHN Toast API
-
----
-
-<br>
-
 ### 今後の予定等
 
+- Restock Monitor for Amazon
+- Attach Private IP to Server Using NHN Toast API
 - CI/CD を Github Actions にて実装
 - サーバーレスでの実装
 - Electron 化
-
-### メモ
-
-- Promise
-- ~~JS 条件分岐再度確認~~
